@@ -33,7 +33,8 @@ class webservices (
   $ensure = installed,
   $targetchatworkgroup,
   $targetcallbackworkgroup,
-){
+)
+{
   $daascache        = 'C:/daas-cache/'
   $installfilespath = 'C:/I3/IC/Install/IC Web Services Chat Files'
   $configurationzip = 'IWT_Configuration-3-0'
@@ -165,9 +166,12 @@ class webservices (
   # CIC Configuration #
   #####################
 
-  # Create workgroup with ACD, chat and callback enabled?
-
-  # Enable HTTP in Web Services configuration (registry)
+  # Enable HTTP in Web Services configuration
+  registry_value {'HKLM\SOFTWARE\Wow6432Node\Interactive Intelligence\EIC\Directory Services\Root\DemoSite\Production\Configuration\Interaction Web\EnableHTTP':
+    ensure => present,
+    type   => array,
+    data   => 'Yes',
+  }
 
   ##################
   # Config.js file #
@@ -179,7 +183,37 @@ class webservices (
     require => Exec['Copy I3Root Files'],
   }
 
-  # Restart WebProcessorBridge (TODO create custom handler)
+  ##############################
+  # Restart WebProcessorBridge #
+  ##############################
+
+  # Download i3pub
+  exec {'Download Custom_RestartSubsystem.i3pub':
+    command  => "\$wc = New-Object System.Net.WebClient;\$wc.DownloadFile('https://onedrive.live.com/download?resid=181212A4EB2683F0!5979&authkey=!AFzYUEuJZPMcX0k&ithint=file%2ci3pub','${cache_dir}/Custom_RestartSubsystem.i3pub')",
+    path     => $::path,
+    cwd      => $::system32,
+    timeout  => 900,
+    provider => powershell,
+  }
+
+  # Publish it
+  exec {'Publish Custom_RestartSubsystem':
+    command  => "EicPublisherU /noprompts ${cache_dir}/Custom_RestartSubsystem.i3pub",
+    path     => $::path,
+    cwd      => $::system32,
+    provider => powershell,
+    require  => Exec['Download Custom_RestartSubsystem.i3pub'],
+  }
+
+  # Call the handler to restart WebProcessorBridge
+  exec {'Restart WebProcessorBridge':
+    command  => "SendCustomNotification Restart Subsystem WebProcessorBridge",
+    provider => powershell,
+    require  => [
+      Exec['Publish Custom_RestartSubsystem'],
+      File['C:/inetpub/wwwroot/I3Root/js/config.js'],
+    ],
+  }
 
   #####################
   # IIS Configuration #
@@ -197,4 +231,25 @@ class webservices (
     content => template('webservices/proxyserver.config.erb'),
     require => File['C:/inetpub/wwwroot/I3Root/Server1'],
   }
+
+  ####################
+  # Desktop Shortcut #
+  ####################
+
+  # Add shortcut to desktop. Should probably move this to a template.
+  file {'Add Desktop Shortcut Script':
+    ensure  => present,
+    path    => "${cache_dir}\\createwebservicesshortcut.ps1",
+    content => "
+      function CreateShortcut(\$AppLocation, \$description){
+        \$WshShell = New-Object -ComObject WScript.Shell
+        \$Shortcut = \$WshShell.CreateShortcut(\"\$env:USERPROFILE\\Desktop\\\$description.url\")
+        \$Shortcut.TargetPath = \$AppLocation
+        #\$Shortcut.Description = \$description
+        \$Shortcut.Save()
+      }
+      CreateShortcut \"http://${hostname}/I3Root\" \"ININ Web Services\"
+      ",
+  }
+
 }
