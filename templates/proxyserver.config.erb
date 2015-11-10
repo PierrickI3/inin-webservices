@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system.webServer>
+        <rewrite>
+            <rules>
+                <rule name="ReverseProxyInboundRule1" stopProcessing="true">
+                    <match url="(.*)" />
+                    <action type="Rewrite" url="https://<%= @hostname %>:3508/{R:1}" />
+                    <conditions>
+                        <add input="{HTTPS}" pattern="On" />
+                    </conditions>
+                </rule>
+                <rule name="ReverseProxyInboundRule2" stopProcessing="true">
+                    <match url="(.*)" />
+                    <action type="Rewrite" url="http://<%= @hostname %>:8114/{R:1}" />
+                    <conditions>
+                        <add input="{HTTPS}" pattern="Off" />
+                    </conditions>
+                </rule>
+            </rules>
+        </rewrite>
+    </system.webServer>
+</configuration>

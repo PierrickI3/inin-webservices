@@ -1,0 +1,18 @@
+/*global ININ: true */
+
+// Register namespaces
+ININ.Web.Common.Type.registerNamespace("ININ.Web.Chat");
+
+// Config class
+ININ.Web.Chat.Config = {
+    "ConfigVersion": 0,
+    "ChatTarget": "<%= @targetchatworkgroup %>",
+    "CallbackTarget": "<%= @targetcallbackworkgroup %>",
+    "ChatTargetType": "Workgroup",
+    "CallbackTargetType": "Workgroup",
+    "InteractionTypes": [ "Chat", "Callback" ],
+    "UseEncryption": false,
+    "ICServerCount": 1,
+    "DefaultLanguageCode": "en-us"
+};
+Bootloader.onLoadedConfig();
