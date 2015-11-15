@@ -13,12 +13,16 @@
 # [*targetcallbackworkgroup*]
 #   Default workgroup to queue callbacks
 #
+# [*cicserver*]
+#   Specify the name or IP address of your CIC server. Leave empty if installing on a CIC server
+#
 # === Examples
 #
 #  class { 'webservices':
 #    ensure                  => installed,
 #    targetchatworkgroup     => 'Marketing',
 #    targetcallbackworkgroup => 'Marketing',
+#    cicserver               => 'MyCic',
 #  }
 #
 # === Authors
@@ -33,6 +37,7 @@ class webservices (
   $ensure = installed,
   $targetchatworkgroup,
   $targetcallbackworkgroup,
+  $cicserver = $hostname,
 )
 {
   $daascache        = 'C:/daas-cache/'
