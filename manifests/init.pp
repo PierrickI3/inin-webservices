@@ -46,6 +46,10 @@ class webservices (
   $exampleszip      = 'IWT_Examples-3-0'
   $i3rootzip        = 'IWT_I3Root-3-0'
 
+  $iisrewritemoduledownloadurl        = 'http://download.microsoft.com/download/C/9/E/C9E8180D-4E51-40A6-A9BF-776990D8BCA9/rewrite_amd64.msi'
+  $apprequestroutingdownloadurl       = 'http://download.microsoft.com/download/E/9/8/E9849D6A-020E-47E4-9FD0-A023E99B54EB/requestRouter_amd64.msi'
+  $subsystemrestarthandlerdownloadurl = 'https://onedrive.live.com/download?resid=181212A4EB2683F0!5979&authkey=!AFzYUEuJZPMcX0k&ithint=file%2ci3pub'
+
   if ($::operatingsystem != 'Windows')
   {
     err('This module works on Windows only!')
@@ -67,7 +71,7 @@ class webservices (
 
   # Download URL Rewrite module
   exec {'Download URL Rewrite module':
-    command  => "\$wc = New-Object System.Net.WebClient;\$wc.DownloadFile('http://download.microsoft.com/download/C/9/E/C9E8180D-4E51-40A6-A9BF-776990D8BCA9/rewrite_amd64.msi','${cache_dir}/rewrite_amd64.msi')",
+    command  => "\$wc = New-Object System.Net.WebClient;\$wc.DownloadFile('${iisrewritemoduledownloadurl}','${cache_dir}/rewrite_amd64.msi')",
     path     => $::path,
     cwd      => $::system32,
     timeout  => 900,
@@ -92,7 +96,7 @@ class webservices (
 
   # Download Microsoft Application Request Routing Version 3 for IIS
   exec {'Download Microsoft Application Request Routing V3':
-    command  => "\$wc = New-Object System.Net.WebClient;\$wc.DownloadFile('http://download.microsoft.com/download/E/9/8/E9849D6A-020E-47E4-9FD0-A023E99B54EB/requestRouter_amd64.msi','${cache_dir}/requestRouter_amd64.msi')",
+    command  => "\$wc = New-Object System.Net.WebClient;\$wc.DownloadFile('${apprequestroutingdownloadurl}','${cache_dir}/requestRouter_amd64.msi')",
     path     => $::path,
     cwd      => $::system32,
     timeout  => 900,
@@ -194,7 +198,7 @@ class webservices (
 
   # Download i3pub
   exec {'Download Custom_RestartSubsystem.i3pub':
-    command  => "\$wc = New-Object System.Net.WebClient;\$wc.DownloadFile('https://onedrive.live.com/download?resid=181212A4EB2683F0!5979&authkey=!AFzYUEuJZPMcX0k&ithint=file%2ci3pub','${cache_dir}/Custom_RestartSubsystem.i3pub')",
+    command  => "\$wc = New-Object System.Net.WebClient;\$wc.DownloadFile('${subsystemrestarthandlerdownloadurl}','${cache_dir}/Custom_RestartSubsystem.i3pub')",
     path     => $::path,
     cwd      => $::system32,
     timeout  => 900,
