@@ -225,7 +225,7 @@ class webservices (
 
   # Enable Proxy
   exec {'Enable Proxy':
-    command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/proxy /enabled:\"True\" /commit:apphost",
+    command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/proxy /enabled:true /commit:apphost",
     path    => $::path,
     cwd     => $::system32,
   }
