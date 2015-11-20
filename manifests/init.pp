@@ -233,7 +233,10 @@ class webservices (
   # Create Server1 subfolder
   file {'C:/inetpub/wwwroot/I3Root/Server1':
     ensure  => directory,
-    require => File['C:/inetpub/wwwroot/I3Root'],
+    require => [
+      File['C:/inetpub/wwwroot/I3Root'],
+      Exec['Enable Proxy'],
+    ],
   }
 
   # Copy web.config
