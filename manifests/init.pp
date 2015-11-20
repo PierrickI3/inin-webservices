@@ -223,6 +223,13 @@ class webservices (
   # IIS Configuration #
   #####################
 
+  # Enable Proxy
+  exec {'Enable Proxy':
+    command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/proxy /enabled:\"True\" /commit:apphost",
+    path    => $::path,
+    cwd     => $::system32,
+  }
+
   # Create Server1 subfolder
   file {'C:/inetpub/wwwroot/I3Root/Server1':
     ensure  => directory,
