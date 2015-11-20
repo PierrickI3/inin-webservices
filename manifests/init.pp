@@ -256,4 +256,10 @@ class webservices (
       ",
   }
 
+  exec {'Add Desktop Shortcut':
+    command => "${cache_dir}\\createwebservicesshortcut.ps1",
+    provider => powershell,
+    require => File['Add Desktop Shortcut Script'],
+  }
+
 }

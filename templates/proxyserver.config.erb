@@ -5,14 +5,14 @@
             <rules>
                 <rule name="ReverseProxyInboundRule1" stopProcessing="true">
                     <match url="(.*)" />
-                    <action type="Rewrite" url="https://<%= @cicserver %>:3508/{R:1}" />
+                    <action type="Rewrite" url="https://<%= @hostname %>:3508/{R:1}" />
                     <conditions>
                         <add input="{HTTPS}" pattern="On" />
                     </conditions>
                 </rule>
                 <rule name="ReverseProxyInboundRule2" stopProcessing="true">
                     <match url="(.*)" />
-                    <action type="Rewrite" url="http://<%= @cicserver %>:8114/{R:1}" />
+                    <action type="Rewrite" url="http://<%= @hostname %>:8114/{R:1}" />
                     <conditions>
                         <add input="{HTTPS}" pattern="Off" />
                     </conditions>
