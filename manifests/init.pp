@@ -225,9 +225,16 @@ class webservices (
 
   # Enable Proxy
   exec {'Enable Proxy':
-    command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/proxy /enabled:true /commit:apphost",
+    command => 'c:\\windows\\system32\\inetsrv\\appcmd.exe set config /section:system.webServer/proxy /enabled:true /commit:apphost',
     path    => $::path,
     cwd     => $::system32,
+    provider => windows,
+    unless  => 'c:\\windows\\system32\\inetsrv\\appcmd.exe list config /section:system.webServer/proxy | findstr /l true\"',
+    require => [
+      Exec['Copy I3Root Files'],
+      Package['Microsoft Application Request Routing V3'],
+      Package['Install URL Rewrite module'],
+    ],
   }
 
   # Create Server1 subfolder
