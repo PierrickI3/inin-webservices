@@ -37,9 +37,9 @@ class webservices (
 {
   $daascache        = 'C:/daas-cache/'
   $installfilespath = 'C:/I3/IC/Install/IC Web Services Chat Files'
-  $configurationzip = 'IWT_Configuration-3-0'
-  $exampleszip      = 'IWT_Examples-3-0'
-  $i3rootzip        = 'IWT_I3Root-3-0'
+  $configurationzip = 'IWT_Configuration-4-0'
+  $exampleszip      = 'IWT_Examples-4-0'
+  $i3rootzip        = 'IWT_I3Root-4-0'
 
   $iisrewritemoduledownloadurl        = 'http://download.microsoft.com/download/C/9/E/C9E8180D-4E51-40A6-A9BF-776990D8BCA9/rewrite_amd64.msi'
   $apprequestroutingdownloadurl       = 'http://download.microsoft.com/download/E/9/8/E9849D6A-020E-47E4-9FD0-A023E99B54EB/requestRouter_amd64.msi'
